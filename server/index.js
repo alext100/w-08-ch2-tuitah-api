@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const debug = require("debug")("tuitah:server");
 const express = require("express");
 const chalk = require("chalk");
-const tuitsRoutes = require("../server/routes/tuitsRoutes");
+const tuitsRoutes = require("./routes/tuitsRoutes");
 
 const app = express();
 

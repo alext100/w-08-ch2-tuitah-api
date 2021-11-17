@@ -27,4 +27,21 @@ describe("Given getTuits controller", () => {
       expect(res.json).toHaveBeenCalledWith(tuits);
     });
   });
+
+  describe("When receives a rejected error", () => {
+    test("Then it should called next function with error, error.message 'No encontrado' and error.code 404", async () => {
+      const res = {
+        json: jest.fn(),
+      };
+      Tuit.find = jest.fn().mockRejectedValue(null);
+      const next = jest.fn();
+      const error = new Error("No encontrado");
+
+      await getTuits(null, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", 404);
+    });
+  });
 });
