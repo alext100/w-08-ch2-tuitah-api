@@ -1,4 +1,4 @@
-const { getTuits } = require("../controllers/tuitsControllers");
+const { getTuits, createTuit } = require("../controllers/tuitsControllers");
 const Tuit = require("../../database/models/Tuit");
 
 jest.mock("../../database/models/Tuit");
@@ -42,6 +42,53 @@ describe("Given getTuits controller", () => {
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
       expect(next.mock.calls[0][0]).toHaveProperty("code", 404);
+    });
+  });
+});
+
+describe("Given a createTuit function", () => {
+  describe("When it receives a tuit", () => {
+    test("It should invoke a res with the method json", async () => {
+      const req = {
+        body: {
+          tuit: {
+            text: "Start nodemon index en package.json!",
+            likes: 1111,
+            date: "2021-11-17T17:40:55.096Z",
+          },
+        },
+      };
+      const tuit = req.body;
+      const res = {
+        json: jest.fn(),
+      };
+
+      Tuit.create = jest.fn().mockResolvedValue(tuit);
+
+      await createTuit(req, res, null);
+
+      expect(res.json).toHaveBeenCalledWith(tuit);
+    });
+  });
+  describe("When createTuit reject", () => {
+    test("Then it should invoke the next function with error reqected with error code 400", async () => {
+      const error = {};
+      Tuit.create = jest.fn().mockRejectedValue(error);
+      const req = {
+        body: {
+          tuit: {
+            text: "Start nodemon index en package.json!",
+            likes: 1111,
+            date: "2021-11-17T17:40:55.096Z",
+          },
+        },
+      };
+      const res = {};
+      const next = jest.fn();
+
+      await createTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });
