@@ -7,7 +7,7 @@
     "test": "jest --watchAll",
     "test-cov": "jest --watchAll --collect--coverage",
     "dev": "nodemon index -q",
-    "start": "nodemon index"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
