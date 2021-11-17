@@ -35,7 +35,7 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
-app.use("/", tuitsRoutes);
+app.use("/tuits", tuitsRoutes);
 
 app.use(handlerNotFound);
 app.use(handlerGeneralError);
