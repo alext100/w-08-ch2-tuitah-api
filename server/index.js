@@ -4,6 +4,8 @@ const debug = require("debug")("tuitah:server");
 const express = require("express");
 const chalk = require("chalk");
 
+const app = express();
+
 const initServer = (port) =>
   new Promise((resolve, reject) => {
     const server = app.listen(port, () => {
