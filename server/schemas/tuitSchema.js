@@ -2,7 +2,7 @@ const { Joi } = require("express-validation");
 
 const tuitValidation = {
   body: Joi.object({
-    text: Joi.string().maxlength(200).required(),
+    text: Joi.string().max(200).required(),
   }),
 };
 
