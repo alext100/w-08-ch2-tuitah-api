@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const debug = require("debug")("tuitah:server");
 const express = require("express");
 const chalk = require("chalk");
+const tuitsRoutes = require("../server/routes/tuitsRoutes");
 
 const app = express();
 
@@ -30,4 +31,5 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
+app.use("/", tuitsRoutes);
 module.exports = { initServer, app };
