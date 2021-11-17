@@ -4,6 +4,10 @@ const debug = require("debug")("tuitah:server");
 const express = require("express");
 const chalk = require("chalk");
 const tuitsRoutes = require("./routes/tuitsRoutes");
+const {
+  handlerNotFound,
+  handlerGeneralError,
+} = require("./middlewares/errors");
 
 const app = express();
 
@@ -32,4 +36,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/", tuitsRoutes);
+
+app.use(handlerNotFound);
+app.use(handlerGeneralError);
 module.exports = { initServer, app };
