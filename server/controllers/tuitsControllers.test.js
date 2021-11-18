@@ -1,8 +1,4 @@
-const {
-  getTuits,
-  createTuit,
-  deleteTuit,
-} = require("../controllers/tuitsControllers");
+const { getTuits, createTuit, deleteTuit } = require("./tuitsControllers");
 const Tuit = require("../../database/models/Tuit");
 
 jest.mock("../../database/models/Tuit");
@@ -106,7 +102,7 @@ describe("Given a deleteTuit function", () => {
         },
       };
       Tuit.findByIdAndRemove = jest.fn().mockResolvedValue({});
-      res = {
+      const res = {
         json: () => {},
       };
 
@@ -125,7 +121,7 @@ describe("Given a deleteTuit function", () => {
           id: "61968c7fee6d921671c7f3a2",
         },
       };
-      res = {};
+      const res = {};
 
       await deleteTuit(req, res, next);
 
