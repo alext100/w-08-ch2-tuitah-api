@@ -23,7 +23,7 @@ const createTuit = async (req, res, next) => {
   }
 };
 
-const addFriend = async (req, res, next) => {
+const addLike = async (req, res, next) => {
   const { id } = req.body;
   try {
     const updatedPost = await Tuit.findById(id);
@@ -58,4 +58,4 @@ const deleteTuit = async (req, res, next) => {
   }
 };
 
-module.exports = { getTuits, createTuit, addFriend, deleteTuit };
+module.exports = { getTuits, createTuit, addLike, deleteTuit };

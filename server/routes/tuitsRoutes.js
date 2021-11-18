@@ -5,7 +5,7 @@ const express = require("express");
 const {
   getTuits,
   createTuit,
-  addFriend,
+  addLike,
   deleteTuit,
 } = require("../controllers/tuitsControllers");
 
@@ -15,7 +15,7 @@ router.get("/", getTuits);
 
 router.post("/createtuit", /*  validate(tuitValidation), */ createTuit);
 
-router.patch("/patch", addFriend);
+router.patch("/like", addLike);
 
 router.delete("/delete/:id", deleteTuit);
 
