@@ -4,16 +4,15 @@ const debug = require("debug")("tuitah:database");
 
 const initDB = (connectionDBString) =>
   new Promise((resolve, reject) => {
-    "toJSON",
-      {
-        virtuals: true,
-        transform: (doc, ret) => {
-          // eslint-disable-next-line no-underscore-dangle
-          delete ret._id;
-          // eslint-disable-next-line no-underscore-dangle
-          delete ret.__v;
-        },
-      };
+    mongoose.set("toJSON", {
+      virtuals: true,
+      transform: (doc, ret) => {
+        // eslint-disable-next-line no-underscore-dangle
+        delete ret._id;
+        // eslint-disable-next-line no-underscore-dangle
+        delete ret.__v;
+      },
+    });
 
     mongoose.connect(connectionDBString, (error) => {
       if (error) {

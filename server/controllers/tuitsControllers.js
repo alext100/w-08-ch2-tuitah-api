@@ -31,9 +31,8 @@ const deleteTuit = async (req, res, next) => {
       const error = new Error("Tuit not found");
       error.code = 404;
       return next(error);
-    } else {
-      res.status(200).json(tuit);
     }
+    res.status(200).json(tuit);
   } catch (error) {
     error.code = 400;
     error.message = "Error on delete tuit";
