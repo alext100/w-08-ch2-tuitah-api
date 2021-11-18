@@ -1,8 +1,4 @@
-const {
-  getTuits,
-  createTuit,
-  addFriend,
-} = require("../controllers/tuitsControllers");
+const { getTuits, createTuit, addFriend } = require("./tuitsControllers");
 const Tuit = require("../../database/models/Tuit");
 
 jest.mock("../../database/models/Tuit");
