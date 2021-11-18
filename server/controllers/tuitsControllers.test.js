@@ -1,4 +1,10 @@
-const { getTuits, createTuit, addFriend } = require("./tuitsControllers");
+const {
+  getTuits,
+  createTuit,
+  addFriend,
+  deleteTuit,
+} = require("./tuitsControllers");
+
 const Tuit = require("../../database/models/Tuit");
 
 jest.mock("../../database/models/Tuit");
@@ -87,6 +93,44 @@ describe("Given a createTuit function", () => {
       const next = jest.fn();
 
       await createTuit(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a deleteTuit function", () => {
+  describe("When it receives a id of the tuit", () => {
+    test("Then it should invoke Tuit.findByIdAndRemove with that id", async () => {
+      const req = {
+        params: {
+          id: "61968c7fee6d921671c7f3a2",
+        },
+      };
+      Tuit.findByIdAndRemove = jest.fn().mockResolvedValue({});
+      const res = {
+        json: () => {},
+      };
+
+      deleteTuit(req, res, null);
+
+      expect(Tuit.findByIdAndRemove).toHaveBeenCalledWith(req.params.id);
+    });
+  });
+
+  describe("And Tuit.findByIdAndRemove rejectrs", () => {
+    test("Than it should invoke next function with error", async () => {
+      const next = jest.fn();
+      const error = {};
+      Tuit.findByIdAndRemove = jest.fn().mockRejectedValue(error);
+      const req = {
+        params: {
+          id: "61968c7fee6d921671c7f3a2",
+        },
+      };
+      const res = {};
+
+      await deleteTuit(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });

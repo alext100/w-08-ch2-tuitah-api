@@ -41,4 +41,21 @@ const addFriend = async (req, res, next) => {
   }
 };
 
-module.exports = { getTuits, createTuit, addFriend };
+const deleteTuit = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const tuit = await Tuit.findByIdAndRemove(id);
+    if (!tuit) {
+      const error = new Error("Tuit not found");
+      error.code = 404;
+      return next(error);
+    }
+    res.status(200).json(tuit);
+  } catch (error) {
+    error.code = 400;
+    error.message = "Error on delete tuit";
+    next(error);
+  }
+};
+
+module.exports = { getTuits, createTuit, addFriend, deleteTuit };

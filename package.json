@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll",
-    "test-cov": "jest --watchAll --collect--coverage",
+    "test-cov": "jest --watchAll --collect-coverage",
     "dev": "nodemon index -q",
     "start": "node index.js"
   },
