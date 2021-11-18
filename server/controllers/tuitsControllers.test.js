@@ -115,4 +115,30 @@ describe("Given a addFriend function", () => {
       expect(next.mock.calls[0][0]).toHaveProperty("code", 404);
     });
   });
+
+  describe("When it receives a correct id", () => {
+    test("Then it should called the method find with the match tuit with likes property +1", async () => {
+      const req = {
+        body: {
+          id: "61969de9d613ef4be4520886",
+        },
+      };
+      const tuit = {
+        _id: "61969de9d613ef4be4520886",
+        text: "O vamos por las buenas o por las malas vosotros decidis",
+        likes: 1,
+        date: "2021-11-18T18:39:37.287Z",
+      };
+
+      tuit.save = jest.fn();
+      Tuit.findById = jest.fn().mockReturnValue(tuit);
+      const res = {
+        json: jest.fn(),
+      };
+
+      await addFriend(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(tuit);
+    });
+  });
 });
