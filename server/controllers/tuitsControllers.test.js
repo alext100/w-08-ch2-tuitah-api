@@ -1,4 +1,8 @@
-const { getTuits, createTuit } = require("../controllers/tuitsControllers");
+const {
+  getTuits,
+  createTuit,
+  addFriend,
+} = require("../controllers/tuitsControllers");
 const Tuit = require("../../database/models/Tuit");
 
 jest.mock("../../database/models/Tuit");
@@ -18,10 +22,10 @@ describe("Given getTuits controller", () => {
           __v: 0,
         },
       ];
-
+      const next = jest.fn();
       Tuit.find = jest.fn().mockResolvedValue(tuits);
 
-      await getTuits(null, res);
+      await getTuits(null, res, next);
 
       expect(Tuit.find).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith(tuits);
@@ -89,6 +93,26 @@ describe("Given a createTuit function", () => {
       await createTuit(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a addFriend function", () => {
+  describe("When it receives a id unexist", () => {
+    test("Then it should called the next function with error", async () => {
+      const req = {
+        body: {
+          id: "619693726e82af9cdd129c6a",
+        },
+      };
+      Tuit.findById = jest.fn().mockReturnValue(false);
+      const next = jest.fn();
+      const error = new Error("Tuit no encontrado");
+      await addFriend(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", 404);
     });
   });
 });
