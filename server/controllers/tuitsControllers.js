@@ -23,4 +23,16 @@ const createTuit = async (req, res, next) => {
   }
 };
 
-module.exports = { getTuits, createTuit };
+const deleteTuit = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const tuit = await Tuit.findByIdAndRemove(id);
+    res.json(tuit);
+  } catch (error) {
+    error.code = 400;
+    error.message = "Tuit not found";
+    next(error);
+  }
+};
+
+module.exports = { getTuits, createTuit, deleteTuit };
