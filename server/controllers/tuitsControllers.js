@@ -23,6 +23,24 @@ const createTuit = async (req, res, next) => {
   }
 };
 
+const addFriend = async (req, res, next) => {
+  const { id } = req.body;
+  try {
+    const updatedPost = await Tuit.findById(id);
+    if (!updatedPost) {
+      const error = new Error("Tuit no encontrado");
+      error.code = 404;
+      return next(error);
+    }
+    updatedPost.likes += 1;
+    updatedPost.save();
+    res.json(updatedPost);
+  } catch {
+    const error = new Error("No se ha podido añadir el like");
+    next(error);
+  }
+};
+
 const deleteTuit = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -40,4 +58,4 @@ const deleteTuit = async (req, res, next) => {
   }
 };
 
-module.exports = { getTuits, createTuit, deleteTuit };
+module.exports = { getTuits, createTuit, addFriend, deleteTuit };

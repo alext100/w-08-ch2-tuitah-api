@@ -1,4 +1,10 @@
-const { getTuits, createTuit, deleteTuit } = require("./tuitsControllers");
+const {
+  getTuits,
+  createTuit,
+  addFriend,
+  deleteTuit,
+} = require("./tuitsControllers");
+
 const Tuit = require("../../database/models/Tuit");
 
 jest.mock("../../database/models/Tuit");
@@ -18,10 +24,10 @@ describe("Given getTuits controller", () => {
           __v: 0,
         },
       ];
-
+      const next = jest.fn();
       Tuit.find = jest.fn().mockResolvedValue(tuits);
 
-      await getTuits(null, res);
+      await getTuits(null, res, next);
 
       expect(Tuit.find).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith(tuits);
@@ -111,6 +117,7 @@ describe("Given a deleteTuit function", () => {
       expect(Tuit.findByIdAndRemove).toHaveBeenCalledWith(req.params.id);
     });
   });
+
   describe("And Tuit.findByIdAndRemove rejectrs", () => {
     test("Than it should invoke next function with error", async () => {
       const next = jest.fn();
@@ -126,6 +133,52 @@ describe("Given a deleteTuit function", () => {
       await deleteTuit(req, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a addFriend function", () => {
+  describe("When it receives a id unexist", () => {
+    test("Then it should called the next function with error", async () => {
+      const req = {
+        body: {
+          id: "619693726e82af9cdd129c6a",
+        },
+      };
+      Tuit.findById = jest.fn().mockReturnValue(false);
+      const next = jest.fn();
+      const error = new Error("Tuit no encontrado");
+      await addFriend(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", 404);
+    });
+  });
+
+  describe("When it receives a correct id", () => {
+    test("Then it should called the method find with the match tuit with likes property +1", async () => {
+      const req = {
+        body: {
+          id: "61969de9d613ef4be4520886",
+        },
+      };
+      const tuit = {
+        _id: "61969de9d613ef4be4520886",
+        text: "O vamos por las buenas o por las malas vosotros decidis",
+        likes: 1,
+        date: "2021-11-18T18:39:37.287Z",
+      };
+
+      tuit.save = jest.fn();
+      Tuit.findById = jest.fn().mockReturnValue(tuit);
+      const res = {
+        json: jest.fn(),
+      };
+
+      await addFriend(req, res);
+
+      expect(res.json).toHaveBeenCalledWith(tuit);
     });
   });
 });
