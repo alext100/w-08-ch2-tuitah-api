@@ -1,7 +1,7 @@
 const {
   getTuits,
   createTuit,
-  addFriend,
+  addLike,
   deleteTuit,
 } = require("./tuitsControllers");
 
@@ -148,7 +148,7 @@ describe("Given a addFriend function", () => {
       Tuit.findById = jest.fn().mockReturnValue(false);
       const next = jest.fn();
       const error = new Error("Tuit no encontrado");
-      await addFriend(req, null, next);
+      await addLike(req, null, next);
 
       expect(next).toHaveBeenCalledWith(error);
       expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
@@ -176,7 +176,7 @@ describe("Given a addFriend function", () => {
         json: jest.fn(),
       };
 
-      await addFriend(req, res);
+      await addLike(req, res);
 
       expect(res.json).toHaveBeenCalledWith(tuit);
     });
