@@ -29,6 +29,8 @@ const initServer = (port) =>
     server.on("close", () => {
       debug(chalk.blue(`El servidor se ha desconectado`));
     });
+  }).catch((error) => {
+    throw error;
   });
 
 app.use(morgan("dev"));
