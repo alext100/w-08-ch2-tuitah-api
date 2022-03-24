@@ -28,6 +28,8 @@ const initDB = (connectionDBString) =>
     mongoose.connection.on("close", () => {
       debug(chalk.green("Desconectado de la base de datos"));
     });
+  }).catch((error) => {
+    throw error;
   });
 
 module.exports = initDB;
